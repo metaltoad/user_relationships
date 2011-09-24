@@ -475,7 +475,7 @@ function user_relationships_type_save($rtype) {
   }
 
   // ensure "expires_val" is numeric and not negative
-  if (!is_numeric($rtype->expires_val) || $rtype->expires_val < 0) {
+  if (!isset($rtype->expires_val) || !$rtype->expires_val >= 0) {
     $rtype->expires_val = 0;
   }
 
@@ -500,6 +500,9 @@ function user_relationships_type_delete($rtid) {
   db_delete('user_relationships')
     ->condition('rtid', $rtid)
     ->execute();
+
+  // Clear static cache.
+  user_relationships_types_load(TRUE);
 
   module_invoke_all('user_relationships_type_delete', $rtype);
 }
@@ -607,7 +610,8 @@ function user_relationships_save_relationship($relationship, $action = 'request'
 
     $keys = array();
     if (isset($relationship->rid)) {
-      // Delete possible requests coming the other direction
+      // Delete possible requests coming the other direction.
+      // @todo: The API prevents this, can this be removed.
       $relationship_type = user_relationships_type_load($relationship->rtid);
       if (!$relationship_type->is_oneway) {
         db_delete('user_relationships')
