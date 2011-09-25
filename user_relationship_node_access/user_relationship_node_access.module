@@ -313,7 +313,7 @@ function user_relationship_node_access_node_access_records($node) {
     $node->user_relationship_node_access = _user_relationship_node_access_load_node_perms($node->nid);
   }
 
-  if (isset($node->user_relationship_node_access) && is_array($node->user_relationship_node_access)) {
+  if (isset($node->user_relationship_node_access) && is_array($node->user_relationship_node_access) && $node->status) {
     foreach ($node->user_relationship_node_access as $rtid => $permissions) {
       $grants[] = array(
         'realm'         => "user_relationship_node_access_{$rtid}",
