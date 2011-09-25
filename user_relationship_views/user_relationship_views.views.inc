@@ -144,7 +144,7 @@ function user_relationship_views_views_data() {
         'handler' => 'views_handler_filter_user_relationships_status',
       ),
     ),
-    'created_at' => array(
+    'created' => array(
       'title' => t('Created date'),
       'help' => t('Date the relationship was requested or created'),
       'field' => array(
@@ -158,7 +158,7 @@ function user_relationship_views_views_data() {
         'handler' => 'views_handler_filter_date',
       ),
     ),
-    'updated_at' => array(
+    'changed' => array(
       'title' => t('Updated date'),
       'help' => t('Date the relationship was approved or edited'),
       'field' => array(

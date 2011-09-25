@@ -370,8 +370,8 @@ function template_preprocess_user_relationships_block(&$variables) {
 
   // select the appropriate set of relationships based on admin's configuration settings
   switch ($settings->sort) {
-    case 'newest': $query_opts['order'] = array('updated_at', 'DESC'); break;
-    case 'oldest': $query_opts['order'] = array('updated_at', 'ASC'); break;
+    case 'newest': $query_opts['order'] = array('changed', 'DESC'); break;
+    case 'oldest': $query_opts['order'] = array('changed', 'ASC'); break;
     case 'random': $query_opts['order'] = 'RAND()'; break;
   }
 

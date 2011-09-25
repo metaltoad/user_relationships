@@ -16,8 +16,8 @@ function user_relationships_schema() {
       'requestee_id'  => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
       'rtid'          => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
       'approved'      => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
-      'created_at'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
-      'updated_at'    => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'created'       => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'changed'       => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
       'flags'         => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
     ),
     'primary key' => array('requester_id', 'requestee_id', 'rtid'),
@@ -101,4 +101,22 @@ function user_relationships_update_7001() {
  */
 function user_relationships_update_7002() {
   db_change_field('user_relationships', 'rid', 'rid', array('type' => 'int', 'not null' => TRUE));
+}
+
+/**
+ * Change column names from created_at and updated_at to created and changed.
+ */
+function user_relationships_update_7003() {
+  db_change_field(
+    'user_relationships',
+    'created_at',
+    'created',
+    array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0)
+  );
+  db_change_field(
+    'user_relationships',
+    'updated_at',
+    'changed',
+    array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0)
+  );
 }

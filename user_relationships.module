@@ -286,7 +286,7 @@ function user_relationships_cron() {
         INNER JOIN {user_relationship_types} urt ON ur.rtid = urt.rtid
       WHERE ur.approved = 0
         AND urt.expires_val > 0
-        AND ur.updated_at < (:now - (urt.expires_val * 86400))
+        AND ur.changed < (:now - (urt.expires_val * 86400))
       GROUP BY ur.rid", array(':now' => $now)
   );
   $expired_requests = $result->fetchCol();
@@ -558,10 +558,10 @@ function user_relationships_save_relationship($relationship, $action = 'request'
   if (!isset($relationship->flags)) {
     $relationship->flags = UR_OK;
   }
-  if (!isset($relationship->created_at)) {
-    $relationship->created_at = REQUEST_TIME;
+  if (!isset($relationship->created)) {
+    $relationship->created = REQUEST_TIME;
   }
-  $relationship->updated_at = REQUEST_TIME;
+  $relationship->changed = REQUEST_TIME;
 
   if ($action == 'approve') {
     $relationship->approved = 1;
@@ -641,7 +641,7 @@ function user_relationships_delete_relationship($relationship, $deleted_by, $act
   *
   * @param $param
   *   an array of parameters with the key being the column. columns from both the user_relationships and user_relationship_types tables will work
-  *     columns from user_relationships: rid, requester_id, requestee_id, rtid, approved, created_at, updated_at, flags
+  *     columns from user_relationships: rid, requester_id, requestee_id, rtid, approved, created, changed, flags
   *     columns from user_relationship_types: name, plural_name, is_oneway, requires_approval, expires_val
   *   There are two special keys:
   *     1) array("between" => array($uid1, $uid2)) will return all relationships between the two user ids.
@@ -651,7 +651,7 @@ function user_relationships_delete_relationship($relationship, $deleted_by, $act
   *     example: show all relationships created in 2007
   *       $start_time = mktime(0,0,0,0,0,2007);
   *       $end_time = mktime(0,0,0,0,0,2008);
-  *       user_relationships_load(array('created_at' => ">= {$start_time}", 'created_at' => '< {$end_time'}));
+  *       user_relationships_load(array('created' => ">= {$start_time}", 'created' => '< {$end_time'}));
   *
   *   each parameter may be an array, if you wish to pass several values
   *     example: user_relationships_load(array('rtid' => array(2, 3), 'between' => array($uid1, $uid2)))
