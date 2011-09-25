@@ -3,3 +3,4 @@ description = "User Relationships UI. This enables basic UI functionality for Us
 package = "User Relationships"
 dependencies[] = user_relationships
 core = 7.x
+files[]=user_relationships_ui.test

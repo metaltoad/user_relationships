@@ -497,28 +497,22 @@ function user_relationships_ui_form_alter(&$form, &$form_state, $form_id) {
 
         $options = array();
         foreach ($relationships as $relationship) {
-          if ($relationship->requires_approval) {
+          if ($relationship->requires_approval && user_relationships_can_receive($form['#user'], $relationship)) {
             $options[$relationship->rtid] = ur_tt("user_relationships:rtid:$relationship->rtid:name", $relationship->name);
           }
         }
 
         //#453090 Do nothing if there are no options.
         if (count($options)) {
-
-        $form['user_relationships_ui_settings']['user_relationships_ui_auto_approve'] = array(
-          '#type'           => 'checkboxes',
-          '#title'          => t('Automatically approve relationship requests from other users'),
-          '#options'        => $options,
-          '#default_value'  => $form['#user']->data['user_relationships_ui_auto_approve'],
-          '#description'    => t("When another user requests a relationship with you, we usually require your approval. If you'd like certain relationship types to be approved automatically, check the box next to that type.")
-        );
+          $form['user_relationships_ui_settings']['user_relationships_ui_auto_approve'] = array(
+            '#type'           => 'checkboxes',
+            '#title'          => t('Automatically approve relationship requests from other users'),
+            '#options'        => $options,
+            '#default_value'  => $form['#user']->data['user_relationships_ui_auto_approve'],
+            '#description'    => t("When another user requests a relationship with you, we usually require your approval. If you'd like certain relationship types to be approved automatically, check the box next to that type.")
+          );
         }
       }
-    }
-
-    // No options have been set so don't display it
-    if (isset($form['user_relationships_ui_settings']) && sizeof($form['user_relationships_ui_settings']) == 3) {
-      unset($form['user_relationships_ui_settings']);
     }
   }
 }
@@ -527,9 +521,14 @@ function user_relationships_ui_form_alter(&$form, &$form_state, $form_id) {
  * Hides the settings fieldset if there are no options to be displayed.
  */
 function user_relationships_ui_account_fieldset_remove_if_empty($element) {
-  if (count(element_children($element)) == 0) {
-    $element['#access'] = FALSE;
+  // Go through all child elements, if any of them is visible, do not hide.
+  // If no elements exist or none are accessible, hide this element.
+  foreach (element_children($element) as $key) {
+    if (!isset($element[$key]['#access'])  || $element[$key]['#access']) {
+      return $element;
+    }
   }
+  $element['#access'] = FALSE;
   return $element;
 }
 
@@ -538,7 +537,6 @@ function user_relationships_ui_account_fieldset_remove_if_empty($element) {
  */
 function user_relationships_ui_user_presave(&$edit, $account, $category) {
   $edit['data']['user_relationships_ui_auto_approve'] = isset($edit['user_relationships_ui_auto_approve']) ? $edit['user_relationships_ui_auto_approve'] : array();
-  $edit['data']['user_relationships_allow_private_message'] = isset($edit['user_relationships_allow_private_message']) ? $edit['user_relationships_allow_private_message'] : array();
 }
 
 /**
