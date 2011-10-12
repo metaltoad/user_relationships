@@ -265,6 +265,38 @@ class UserRelationshipsTestCase extends DrupalWebTestCase {
     $this->assertEqual(count($result), 4);
     $result = user_relationships_load(array('between' => array($u1->uid, $u3->uid)), array('include_twoway_reverse' => 1));
     $this->assertEqual(count($result), 4);
+
+    // #1211060: Make sure that exactly one reverse relationship is created when
+    // a twoway relationship is approved.
+
+    // Make sure only an unapproved relationship from u4 to u2 exists.
+    $unapproved_relationship = user_relationships_load(array('requestee_id' => $u2->uid, 'requester_id' => $u4->uid, 'rtid' => $this->rtypes['approval']->rtid));
+    $unapproved_relationship = reset($unapproved_relationship);
+    $this->assertFalse($unapproved_relationship->approved);
+    $this->assertFalse(user_relationships_load(array('requester_id' => $u2->uid, 'requestee_id' => $u4->uid, 'rtid' => $this->rtypes['approval']->rtid)));
+
+    // Approve the relationship.
+    user_relationships_save_relationship($unapproved_relationship, 'approve');
+
+    // Make sure the relationship was approved and exists both ways.
+    $relationship = user_relationships_load(array('requestee_id' => $u2->uid, 'requester_id' => $u4->uid, 'rtid' => $this->rtypes['approval']->rtid));
+    $relationship = reset($relationship);
+    $this->assertTrue($relationship->approved);
+    $relationship = user_relationships_load(array('requester_id' => $u2->uid, 'requestee_id' => $u4->uid, 'rtid' => $this->rtypes['approval']->rtid));
+    $relationship = reset($relationship);
+    $this->assertTrue($relationship->approved);
+
+    // Update the relationship again, make sure that only a single entry for
+    // both directions exists.
+    user_relationships_save_relationship($relationship, 'update');
+
+    $arguments_array = array(
+      array(':requestee_id' => $u2->uid, ':requester_id' => $u4->uid, ':rtid' => $this->rtypes['approval']->rtid),
+      array(':requester_id' => $u2->uid, ':requestee_id' => $u4->uid, ':rtid' => $this->rtypes['approval']->rtid)
+    );
+    foreach ($arguments_array as $arguments) {
+      $this->assertEqual(1, db_query('SELECT COUNT(*) FROM {user_relationships} WHERE requester_id = :requester_id AND requestee_id = :requestee_id AND rtid = :rtid', $arguments)->fetchField());
+    }
   }
 
   //Test #348025 that user_relationship_load_types will load is_reciprocal flag
