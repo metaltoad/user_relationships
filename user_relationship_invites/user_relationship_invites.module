@@ -38,8 +38,22 @@ function user_relationship_invites_form_invite_form_alter(&$form, $form_state) {
   $new_user->user_relationships_allow_all = TRUE;
   module_load_include('inc', 'user_relationships_ui', 'user_relationships_ui.forms');
   $form += user_relationships_ui_request_form($user, $new_user, isset($form_state['values']) ? $form_state['values'] : array());
-  $form['rtid']['#weight'] = 0;
-  $form['#validate'][] = 'user_relationship_invites_invite_form_validate';
+  if (isset($form['rtid'])) {
+    $form['ur_request'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Request relationship'),
+      '#weight' => -1,
+      '#default_value' => 1,
+    );
+    $form['rtid']['#weight'] = 0;
+    // Only show rtid if ur_request is checked.
+    $form['rtid']['#states'] = array(
+      'visible' => array(
+        ':input[name=ur_request]' => array('checked' => TRUE),
+      ),
+    );
+    $form['#validate'][] = 'user_relationship_invites_invite_form_validate';
+  }
 }
 
 /**
@@ -50,18 +64,22 @@ function user_relationship_invites_form_invite_form_alter(&$form, $form_state) {
  */
 function user_relationship_invites_invite_form_validate($form, &$form_state) {
   global $user;
-  if (!empty($form_state['values']['rtid'])) {
+  if (!empty($form_state['values']['rtid']) && $form_state['values']['ur_request']) {
     $user->rtid = $form_state['values']['rtid'];
-  }
-  $user->rtid = $form_state['values']['rtid'];
-  $emails = _invite_get_emails($form_state['values']['email']);
-  if ($failed_emails = _invite_filter_registered_emails($emails)) {
-    foreach ($failed_emails as $email) {
-      $account = user_load_by_mail($email);
-      if ($actions = user_relationships_ui_actions_between($user, $account, array('add' => 1, 'requested' => 1, 'received' => 1))) {
-        drupal_set_message(theme('item_list', array('items' => $actions)), 'error');
+    $emails = _invite_get_emails($form_state['values']['email']);
+    if ($failed_emails = _invite_filter_registered_emails($emails)) {
+      foreach ($failed_emails as $email) {
+        $account = user_load_by_mail($email);
+        if ($actions = user_relationships_ui_actions_between($user, $account, array('add' => 1, 'requested' => 1, 'received' => 1))) {
+          drupal_set_message(theme('item_list', array('items' => $actions)), 'error');
+        }
       }
     }
+  }
+  else {
+    unset($form_state['values']['rtid']);
+    unset($form_state['values']['requestor']);
+    unset($form_state['values']['requestee']);
   }
 }
 
