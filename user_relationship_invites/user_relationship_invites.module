@@ -46,11 +46,22 @@ function user_relationship_invites_form_invite_form_alter(&$form, $form_state) {
  * Custom form validation handler for the 'invite_form' form from Invite module
  * This custom handler acts to store the User Relationships relationship type ID
  * so that it can be used in the hook_invite implementation as it is not otherwise available.
+ * Also, adds a relationship action link if the user already exists.
  */
 function user_relationship_invites_invite_form_validate($form, &$form_state) {
   global $user;
   if (!empty($form_state['values']['rtid'])) {
     $user->rtid = $form_state['values']['rtid'];
+  }
+  $user->rtid = $form_state['values']['rtid'];
+  $emails = _invite_get_emails($form_state['values']['email']);
+  if ($failed_emails = _invite_filter_registered_emails($emails)) {
+    foreach ($failed_emails as $email) {
+      $account = user_load_by_mail($email);
+      if ($actions = user_relationships_ui_actions_between($user, $account, array('add' => 1, 'requested' => 1, 'received' => 1))) {
+        drupal_set_message(theme('item_list', array('items' => $actions)), 'error');
+      }
+    }
   }
 }
 
