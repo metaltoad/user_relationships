@@ -246,6 +246,15 @@ function user_relationship_defaults_user_update(&$edit, $account) {
   }
 }
 
+/**
+ * Implements hook_user_delete().
+ */
+function user_relationship_defaults_user_delete($account) {
+  db_delete('user_relationship_defaults')
+    ->condition('uid', $account->uid)
+    ->execute();
+}
+
 function _user_relationship_defaults_create_default_relationships($account) {
   //note that if a new account is approved, then blocked and unblocked before the user logged in once,
   //it'll attempt to create default relationships again (there won't be any errors if they already exist, though)
