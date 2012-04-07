@@ -1,4 +1,4 @@
-name = UR-UI
+name = User Relationships UI
 description = "User Relationships UI. This enables basic UI functionality for User Relationships"
 package = "User Relationships"
 dependencies[] = user_relationships

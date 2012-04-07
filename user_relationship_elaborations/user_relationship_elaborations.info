@@ -1,4 +1,4 @@
-name = UR-Elaborations
+name = User Relationships Elaborations
 description = "Allow users to elaborate on their relationships with others"
 dependencies[] = user_relationships
 package = "User Relationships"

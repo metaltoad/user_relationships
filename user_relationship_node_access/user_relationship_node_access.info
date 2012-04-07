@@ -1,4 +1,4 @@
-name = UR-Node Access
+name = User Relationships Node Access
 description = "Provides per node access control based on relationship to author"
 dependencies[] = user_relationships
 package = "User Relationships"

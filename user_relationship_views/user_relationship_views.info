@@ -1,4 +1,4 @@
-name = UR-Views
+name = User Relationships Views
 description = "Integrates User Relationships with Views"
 dependencies[] = user_relationships
 dependencies[] = views

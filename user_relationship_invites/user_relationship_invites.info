@@ -1,4 +1,4 @@
-name = UR-Invite
+name = User Relationships Invites
 description = "Gives users the option of specifying a relationship when inviting new users"
 dependencies[] = user_relationships
 dependencies[] = user_relationships_ui

@@ -1,4 +1,4 @@
-name = UR-Rules
+name = User Relationships Rules
 description = "Rules integration for User Relationships."
 package = "User Relationships"
 core = 7.x
