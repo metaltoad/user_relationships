@@ -25,7 +25,8 @@ function user_relationships_preprocess_author_pane(&$variables) {
 
   $rtids = variable_get('user_relationships_author_pane_rtids', array());
   if (!is_array($rtids)) {
-    $rtids = array($rtids);//wrap into array for now, while selection is single
+    // Wrap into array for now, while selection is single.
+    $rtids = array($rtids);
   }
   if (!count($rtids)) {
     return;

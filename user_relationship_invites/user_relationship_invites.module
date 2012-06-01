@@ -17,7 +17,7 @@
  *
  * @return
  *    object with the invite data including the inviter user object and relationship_type object
-*/
+ */
 function user_relationship_invites_get_invite($code) {
   if ($invite = db_query("SELECT * FROM {user_relationship_invites} WHERE invite_code = :code", array(':code' => $code))->fetchObject()) {
     $invite->inviter = user_load($invite->inviter_uid);
@@ -29,7 +29,7 @@ function user_relationship_invites_get_invite($code) {
 
 /**
  * Implements hook_form_alter().
-*/
+ */
 function user_relationship_invites_form_invite_form_alter(&$form, $form_state) {
   global $user;
   $new_user = drupal_anonymous_user();
@@ -85,7 +85,7 @@ function user_relationship_invites_invite_form_validate($form, &$form_state) {
 
 /**
  * Implements hook_invite_send().
-*/
+ */
 function user_relationship_invites_invite_send($invite) {
   global $user;
   if (!empty($user->rtid)) {
@@ -101,7 +101,7 @@ function user_relationship_invites_invite_send($invite) {
 
 /**
  * Implements hook_user().
-*/
+ */
 function user_relationship_invites_form_user_register_form_alter(&$form, &$form_state) {
   if (!empty($_SESSION[INVITE_SESSION]) && ($code = $_SESSION[INVITE_SESSION]) && ($invite = user_relationship_invites_get_invite($code)) && $invite->relationship_type) {
 

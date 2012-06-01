@@ -60,7 +60,7 @@ function user_relationships_page($account = NULL, $rtid = NULL) {
       // Add an empty space to the operations table row.
       $rows[$relationship->rid][] = '&nbsp;';
     }
-   }
+  }
 
   if (!empty($rtid)) {
     $empty = t('You do not have any %rel_plural_name.', user_relationships_type_translations($relationship_type));
@@ -184,7 +184,7 @@ function user_relationships_ui_get_table_row($relationship, $account) {
       $links[] = theme('user_relationships_remove_link', array('uid' => $account->uid, 'rid' => $relationship->rid));
     }
   }
-  else if (user_relationships_ui_check_access($permission, $account, $relationship)) {
+  elseif (user_relationships_ui_check_access($permission, $account, $relationship)) {
     if ($this_user_str == 'requestee') {
       // Sent requests, display cancel link.
       $links[] = theme('user_relationships_pending_request_cancel_link', array('uid' => $account->uid, 'rid' => $relationship->rid));

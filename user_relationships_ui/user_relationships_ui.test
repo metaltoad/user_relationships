@@ -82,7 +82,7 @@ class UserRelationshipUserSettings extends DrupalWebTestCase {
    * Test the various user settings.
    */
   function testAutoApprovalSettings() {
-     $permissions = array(
+    $permissions = array(
       'can have ' . $this->rtypes['oneway']->name . ' relationships',
       'can request ' . $this->rtypes['oneway']->name . ' relationships',
       'can have ' . $this->rtypes['twoway']->name . ' relationships',
@@ -175,13 +175,13 @@ class UserRelationshipUserSettings extends DrupalWebTestCase {
     $this->assertEqual(count($relationships), 2);
     foreach ($relationships as $relationship) {
       if ($relationship->rtid == $this->rtypes['approval-oneway']->rtid) {
-        $this->assertTrue((bool)$relationship->approved);
+        $this->assertTrue((bool) $relationship->approved);
       }
       elseif ($relationship->rtid == $this->rtypes['approval']->rtid) {
-        $this->assertFalse((bool)$relationship->approved);
+        $this->assertFalse((bool) $relationship->approved);
       }
       else {
-        $this->fail('Unexpected relationship type @type' , array('@type' => $relationship->rtid));
+        $this->fail('Unexpected relationship type @type', array('@type' => $relationship->rtid));
       }
     }
 

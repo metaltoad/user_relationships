@@ -15,6 +15,9 @@ define('USER_RELATIONSHIPS_NAME_PLURAL', 1);
 define('USER_RELATIONSHIPS_NAME_CAPITAL', 2);
 define('USER_RELATIONSHIPS_NAME_REVERSE', 4);
 
+/**
+ * Implements hook_menu().
+ */
 function user_relationships_menu() {
   $items['admin/config/people/relationships'] = array(
     'title' => 'Relationships',
@@ -86,8 +89,8 @@ function user_relationships_setting_validation($element, $validations) {
     }
 
     $valid = function_exists($validation) && call_user_func_array($validation, $arguments);
-    $valid = !$valid ? ($validation == 'is_positive' && is_numeric($arguments) && (int)$arguments > 0) : FALSE;
-    $valid = !$valid ? ($validation == 'is_non_negative' && is_numeric($arguments) && (int)$arguments > -1) : FALSE;
+    $valid = !$valid ? ($validation == 'is_positive' && is_numeric($arguments) && (int) $arguments > 0) : FALSE;
+    $valid = !$valid ? ($validation == 'is_non_negative' && is_numeric($arguments) && (int) $arguments > -1) : FALSE;
 
     if (!$valid) {
       form_set_error($element['#name'], $info['msg']);
@@ -102,7 +105,8 @@ function user_relationships_setting_validation($element, $validations) {
 function _user_relationships_generate_query($param = array(), $options = array()) {
   extract($options, EXTR_SKIP);
 
-  $twoway_reverse_clause = FALSE;//#479486
+  // #479486.
+  $twoway_reverse_clause = FALSE;
 
   // Doing a JOIN on the {user_relationship_types} table is rather slow as
   // MySQL has to use ALL for the table join. On most sites, there will only be
@@ -198,7 +202,8 @@ function _user_relationships_generate_query($param = array(), $options = array()
       case 'rid':
       case 'requester_id':
       case 'requestee_id':
-        $twoway_reverse_clause = TRUE;//#479486 these columns automatically should exclude duplicates
+        // #479486 these columns automatically should exclude duplicates.
+        $twoway_reverse_clause = TRUE;
 
       default:
         $types_cols = array('name', 'plural_name', 'is_oneway', 'is_reciprocal', 'requires_approval', 'expires_val');
@@ -347,7 +352,7 @@ function user_relationships_cron() {
  * Implements hook_user_cancel().
  */
 function user_relationships_user_cancel($edit, $account, $method) {
-    db_delete('user_relationships')
+  db_delete('user_relationships')
       ->condition(db_or()
         ->condition('requester_id', $account->uid)
         ->condition('requestee_id', $account->uid)
@@ -697,60 +702,60 @@ function user_relationships_delete_relationship($relationship, $deleted_by, $act
 
 
 /**
-  * Load relationship objects from the database.
-  *
-  * @param $param
-  *   an array of parameters with the key being the column. columns from both the user_relationships and user_relationship_types tables will work
-  *     columns from user_relationships: rid, requester_id, requestee_id, rtid, approved, created, changed, flags
-  *     columns from user_relationship_types: name, plural_name, is_oneway, requires_approval, expires_val
-  *   There are two special keys:
-  *     1) array("between" => array($uid1, $uid2)) will return all relationships between the two user ids.
-  *     2) array("user" => $uid) will return all relationships for the specified uid
-  *
-  *   arguments will process operators as well using the syntax: array(col => '> {value}').
-  *     example: show all relationships created in 2007
-  *       $start_time = mktime(0,0,0,0,0,2007);
-  *       $end_time = mktime(0,0,0,0,0,2008);
-  *       user_relationships_load(array('created' => ">= {$start_time}", 'created' => '< {$end_time'}));
-  *
-  *   each parameter may be an array, if you wish to pass several values
-  *     example: user_relationships_load(array('rtid' => array(2, 3), 'between' => array($uid1, $uid2)))
-  *       will load all relationships of types 2 or 3 between uid1 and uid2 (query will have an IN clause)
-  *
-  * @param @options
-  *   An array keyed by the option
-  *   count
-  *     a boolean stating whether or not the return value should be the number of relationships found
-  *
-  *   sort
-  *     a string containing a valid column name which will become the key for the returned array of relationships
-  *     default is 'rid'
-  *
-  *   order
-  *     a string containing SQL stating the column and direction of the sort (ex. "requester_id ASC, rtid DESC")
-  *
-  *   limit
-  *     a string containing SQL stating the limit (ex "10" or "10, 5")
-  *
-  *   include_user_info
-  *     a boolean that will load basic user info without having to call user_load
-  *     columns: uid, name, mail, data, picture
-  *
-  *   include_twoway_reverse (not used unless there is a specific need)
-  *     a boolean that, if present, and if sort is set to other than 'rid', will include records for both directions for
-  *     two-way relationships. Normally for a two-way relationship only one entry is returned, although in the database there
-  *     are two records. This flag has no effect if sort is 'rid'
-  *
-  * @param $reset
-  *   a boolean that will reset the internal static $relationships variable to ensure programmatic relationship insertion works
-  *
-  * @return
-  *   an array of relationships
-  *   if the key is "rid" the array will be a single dimension: array($rid => $relationship, $rid => $relationship)
-  *   otherwise it'll be multidimensional: array($rtid => array($relationship, $relationship))
-  *
-  *   each relationship will have the user's name, mail, and data attached as requester_name, requester_mail, requester_data
-  *   or requestee_name, requestee_mail, requestee_data
+ * Load relationship objects from the database.
+ *
+ * @param $param
+ *   an array of parameters with the key being the column. columns from both the user_relationships and user_relationship_types tables will work
+ *     columns from user_relationships: rid, requester_id, requestee_id, rtid, approved, created, changed, flags
+ *     columns from user_relationship_types: name, plural_name, is_oneway, requires_approval, expires_val
+ *   There are two special keys:
+ *     1) array("between" => array($uid1, $uid2)) will return all relationships between the two user ids.
+ *     2) array("user" => $uid) will return all relationships for the specified uid
+ *
+ *   arguments will process operators as well using the syntax: array(col => '> {value}').
+ *     example: show all relationships created in 2007
+ *       $start_time = mktime(0,0,0,0,0,2007);
+ *       $end_time = mktime(0,0,0,0,0,2008);
+ *       user_relationships_load(array('created' => ">= {$start_time}", 'created' => '< {$end_time'}));
+ *
+ *   each parameter may be an array, if you wish to pass several values
+ *     example: user_relationships_load(array('rtid' => array(2, 3), 'between' => array($uid1, $uid2)))
+ *       will load all relationships of types 2 or 3 between uid1 and uid2 (query will have an IN clause)
+ *
+ * @param @options
+ *   An array keyed by the option
+ *   count
+ *     a boolean stating whether or not the return value should be the number of relationships found
+ *
+ *   sort
+ *     a string containing a valid column name which will become the key for the returned array of relationships
+ *     default is 'rid'
+ *
+ *   order
+ *     a string containing SQL stating the column and direction of the sort (ex. "requester_id ASC, rtid DESC")
+ *
+ *   limit
+ *     a string containing SQL stating the limit (ex "10" or "10, 5")
+ *
+ *   include_user_info
+ *     a boolean that will load basic user info without having to call user_load
+ *     columns: uid, name, mail, data, picture
+ *
+ *   include_twoway_reverse (not used unless there is a specific need)
+ *     a boolean that, if present, and if sort is set to other than 'rid', will include records for both directions for
+ *     two-way relationships. Normally for a two-way relationship only one entry is returned, although in the database there
+ *     are two records. This flag has no effect if sort is 'rid'
+ *
+ * @param $reset
+ *   a boolean that will reset the internal static $relationships variable to ensure programmatic relationship insertion works
+ *
+ * @return
+ *   an array of relationships
+ *   if the key is "rid" the array will be a single dimension: array($rid => $relationship, $rid => $relationship)
+ *   otherwise it'll be multidimensional: array($rtid => array($relationship, $relationship))
+ *
+ *   each relationship will have the user's name, mail, and data attached as requester_name, requester_mail, requester_data
+ *   or requestee_name, requestee_mail, requestee_data
  */
 function user_relationships_load($param = array(), $options = array(), $reset = FALSE) {
   static $relationships = array();
@@ -774,7 +779,7 @@ function user_relationships_load($param = array(), $options = array(), $reset = 
   $query = _user_relationships_generate_query($param, $options);
 
   if (!empty($count)) {
-    return (int)$query->execute()->fetchField();
+    return (int) $query->execute()->fetchField();
   }
 
   $relationships = array();
@@ -1090,7 +1095,7 @@ function user_relationships_autocomplete_types($string = '') {
     $result = db_query_range("SELECT rtid, name FROM {user_relationship_types} WHERE LOWER(name) LIKE LOWER(:string)", 0, 10, array(':string' => '%' . strtolower($string) . '%'));
     foreach ($result as $relationship) {
       $matches[$relationship->name] = check_plain(user_relationships_type_get_name($relationship));
-   }
+    }
   }
   print drupal_json_output($matches);
 }

@@ -178,7 +178,7 @@ class UserRelationshipsTestCase extends UserRelationshipsBaseTestCase {
   function testRelationshipAPI() {
     $this->createDefaultRelationshipTypes();
 
-     $permissions = array(
+    $permissions = array(
       'can have ' . $this->rtypes['oneway']->name . ' relationships',
       'can request ' . $this->rtypes['oneway']->name . ' relationships',
       'can have ' . $this->rtypes['twoway']->name . ' relationships',
@@ -291,13 +291,13 @@ class UserRelationshipsTestCase extends UserRelationshipsBaseTestCase {
     $u3 = $this->drupalCreateUser($permissions);
     $u4 = $this->drupalCreateUser($permissions);
     // Create relationships.
-    $this->assertTrue((bool)user_relationships_request_relationship($u1, $u2, $this->rtypes['oneway']->rtid, FALSE));
-    $this->assertTrue((bool)user_relationships_request_relationship($u1, $u3, $this->rtypes['oneway']->rtid, FALSE));
+    $this->assertTrue((bool) user_relationships_request_relationship($u1, $u2, $this->rtypes['oneway']->rtid, FALSE));
+    $this->assertTrue((bool) user_relationships_request_relationship($u1, $u3, $this->rtypes['oneway']->rtid, FALSE));
     // user_relationships_request_relationship($u3, $u1, $this->rtypes['oneway']->rtid, FALSE);//this is a no-op
 
-    $this->assertTrue((bool)user_relationships_request_relationship($u1, $u2, $this->rtypes['twoway']->rtid, FALSE));
-    $this->assertTrue((bool)user_relationships_request_relationship($u1, $u3, $this->rtypes['twoway']->rtid, FALSE));
-    $this->assertTrue((bool)user_relationships_request_relationship($u4, $u1, $this->rtypes['twoway']->rtid, FALSE));
+    $this->assertTrue((bool) user_relationships_request_relationship($u1, $u2, $this->rtypes['twoway']->rtid, FALSE));
+    $this->assertTrue((bool) user_relationships_request_relationship($u1, $u3, $this->rtypes['twoway']->rtid, FALSE));
+    $this->assertTrue((bool) user_relationships_request_relationship($u4, $u1, $this->rtypes['twoway']->rtid, FALSE));
     //test between
     $result = user_relationships_load(array('between' => array($u1->uid, $u2->uid)));
     $this->assertEqual(count($result), 2);
@@ -480,7 +480,7 @@ class UserRelationshipsTestCase extends UserRelationshipsBaseTestCase {
     $rtype = $rtypes[$this->rtypes['approval-oneway']->rtid];
     $this->assertFalse($rtype->is_reciprocal);
     $rtype = $rtypes[$this->rtypes['approval']->rtid];
-    $this-> assertFalse($rtype->is_reciprocal);
+    $this->assertFalse($rtype->is_reciprocal);
   }
 }
 
@@ -509,7 +509,7 @@ class UserRelationshipsTypesTestCase extends DrupalWebTestCase {
 
   function testNames() {
     // Create relationship type.
-    $relationship_type = (object)array(
+    $relationship_type = (object) array(
       'name' => $this->randomName(),
       'plural_name' => $this->randomName(),
       'reverse_name' => $this->randomName(),

@@ -301,7 +301,7 @@ function user_relationships_admin_type_edit($form, &$form_state, $relationship_t
 
   $form['rtid'] = array(
     '#type'   => 'value',
-    '#value'  => isset($relationship_type->rtid) ? (int)$relationship_type->rtid : NULL,
+    '#value'  => isset($relationship_type->rtid) ? (int) $relationship_type->rtid : NULL,
   );
   $form['action'] = array(
     '#type'   => 'value',
@@ -335,7 +335,7 @@ function user_relationships_admin_type_delete($form, &$form_state, $relationship
   if ($relationship_type) {
     $form['rtid'] = array(
       '#type'   => 'value',
-      '#value'  => (int)$relationship_type->rtid,
+      '#value'  => (int) $relationship_type->rtid,
     );
 
     return confirm_form(
@@ -367,7 +367,7 @@ function user_relationships_admin_type_edit_validate($form, &$form_state) {
   }
 
   $expire = $form_state['values']['expires_val'];
-  if (!is_numeric($expire) || (int)$expire < 0) {
+  if (!is_numeric($expire) || (int) $expire < 0) {
     form_set_error('expires_val', t('Expiration period must be an integer greater than or equal to 0.'));
   }
 }
@@ -376,7 +376,7 @@ function user_relationships_admin_type_edit_validate($form, &$form_state) {
  * Process the relationship edit page form submission.
  */
 function user_relationships_admin_type_edit_submit($form, &$form_state) {
-  $relationship_type = (object)$form_state['values'];
+  $relationship_type = (object) $form_state['values'];
 
   user_relationships_type_save($relationship_type);
 
@@ -453,8 +453,8 @@ function user_relationships_admin_types_list_page() {
       user_relationships_type_get_name($relationship),
       ($relationship->is_oneway ? ($relationship->is_reciprocal ? t('Reciprocal') : t('One-way')) : t('Mutual')),
       $approval,
-      l(t('edit'),    "admin/config/people/relationships/{$relationship->rtid}/edit") . ' | ' .
-      l(t('delete'),  "admin/config/people/relationships/{$relationship->rtid}/delete")
+      l(t('edit'),     "admin/config/people/relationships/{$relationship->rtid}/edit") . ' | ' .
+      l(t('delete'),   "admin/config/people/relationships/{$relationship->rtid}/delete")
     );
   }
 

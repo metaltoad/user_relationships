@@ -57,7 +57,7 @@ function user_relationships_panels_visibility_ctools_access_check($conf, $contex
   $account2 = $context[1]->data;
 
   // If you are viewing something which is your own (like your profile) return TRUE.
-  if($conf['ur_self']['1'] == 1 && $account1->uid == $account2->uid) {
+  if ($conf['ur_self']['1'] == 1 && $account1->uid == $account2->uid) {
     return TRUE;
   }
 

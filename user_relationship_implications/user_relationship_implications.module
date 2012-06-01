@@ -124,8 +124,8 @@ function user_relationship_implications_edit_submit($form, &$form_state) {
       $implication = array(
         'rtid'          => $rtid,
         'implies_rtid'  => $implies_rtid,
-        'strict'        => (bool)$elements["implied_{$implies_rtid}_strict"],
-        'reverse'       => (bool)$elements["implied_{$implies_rtid}_reverse"],
+        'strict'        => (bool) $elements["implied_{$implies_rtid}_strict"],
+        'reverse'       => (bool) $elements["implied_{$implies_rtid}_reverse"],
       );
       drupal_write_record('user_relationship_implications', $implication);
     }
@@ -288,7 +288,7 @@ function theme_user_relationship_implications_page($variables) {
     $params['rtid'] = $relationship->rtid;
   }
 
-    // To Page or not to Page
+  // To Page or not to Page.
   $variables['relationships_per_page'] = variable_get('user_relationships_relationships_per_page', 16);
   $options = array('include_user_info' => TRUE, 'paging' => $variables['relationships_per_page']);
 
@@ -342,6 +342,6 @@ function _user_relationship_implications_load_relationship_names($relationships,
 
 
 function _user_relationship_implications_filter_for_reverse($implication) {
-  $implication = (array)$implication;
+  $implication = (array) $implication;
   return $implication['reverse'];
 }
