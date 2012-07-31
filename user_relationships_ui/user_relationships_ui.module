@@ -26,7 +26,7 @@ function _user_relationships_ui_set_notifications(&$account) {
   $relationships = user_relationships_load(array('requestee_id' => $account->uid, 'approved' => FALSE));
   foreach ($relationships as $relationship) {
     $msg = user_relationships_get_message('pending', $relationship, array(
-      '!pending_relationship_requests'  => l(t('pending relationship requests'), variable_get('user_relationships_requests_link', 'relationships/requests'))
+      '!pending_relationship_requests'  => l(t('pending relationship requests'), variable_get('user_relationships_requests_link', 'relationships/received'))
     ));
 
     if (!in_array($msg, $notifications)) {
