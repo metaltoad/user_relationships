@@ -4,4 +4,3 @@ dependencies[] = user_relationships
 dependencies[] = user_relationships_ui
 package = "User Relationships"
 core = 7.x
-files[]=user_relationship_mailer_defaults.inc
