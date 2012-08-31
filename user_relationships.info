@@ -2,4 +2,5 @@ name = User Relationships
 description = "API for User Relationships. This only provides the programming interface."
 package = "User Relationships"
 core = 7.x
+configure = admin/config/people/relationships
 files[]=user_relationships.test
