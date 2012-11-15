@@ -63,7 +63,7 @@ function user_relationships_page($account = NULL, $rtid = NULL) {
   }
 
   if (!empty($rtid)) {
-    $empty = t('You do not have any %rel_plural_name.', user_relationships_type_translations($relationship_type));
+    $empty = t('You do not have any @rel_name_plural.', user_relationships_type_translations($relationship_type));
   }
   else {
     $empty = t('You do not have any relationships with other users.');
