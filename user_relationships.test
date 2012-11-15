@@ -44,7 +44,7 @@ class UserRelationshipsBaseTestCase extends DrupalWebTestCase {
     }
 
     // Flush static cache.
-    user_relationships_types_load(TRUE);
+    drupal_static_reset('user_relationships_types_load');
 
     if (in_array('oneway', $create_types)) {
       $rtype = new StdClass;
@@ -104,10 +104,10 @@ class UserRelationshipsBaseTestCase extends DrupalWebTestCase {
     }
 
     // Flush static cache.
-    user_relationships_types_load(TRUE);
+    drupal_static_reset('user_relationships_types_load');
 
     // Flush permission cache.
-    user_relationships_types_load(TRUE);
+    user_relationships_types_load();
     $this->checkPermissions(array(), TRUE);
   }
 }

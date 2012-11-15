@@ -384,15 +384,12 @@ function user_relationships_activity_info() {
  *    relationship, such as rtid or name. Attributes must match column names
  *    in the user_relationship_types table.
  *
- * @param $reset
- *    a boolean that forces a reset of the internal static types list
- *
  * @return
  *    object of the requested relationship type
  *
  */
-function user_relationships_type_load($param = array(), $reset = NULL) {
-  $types = user_relationships_types_load($reset);
+function user_relationships_type_load($param = array()) {
+  $types = user_relationships_types_load();
 
   if (!is_array($param)) {
     if (isset($types[$param])) {
@@ -432,16 +429,13 @@ function user_relationships_type_load($param = array(), $reset = NULL) {
 /**
  * Load all relationship types.
  *
- * @param $reset
- *   A boolean that forces a reset of the internal static types list
- *
  * @return
  *   Array of relationship_type objects
  */
-function user_relationships_types_load($reset = FALSE) {
-  static $relationship_types_list = NULL;
+function user_relationships_types_load() {
+  $relationship_types_list = &drupal_static(__FUNCTION__);
 
-  if ($reset || !isset($relationship_types_list)) {
+  if (!isset($relationship_types_list)) {
     // Clear the cached list, since some relationships may have disappeared.
     $relationship_types_list = db_query("SELECT * FROM {user_relationship_types}")->fetchAllAssoc('rtid');
 
@@ -494,7 +488,7 @@ function user_relationships_type_save($rtype) {
   if (module_exists('i18n_string')) {
     i18n_string_object_update('user_relationships_type', $rtype);
   }
-  user_relationships_types_load(TRUE);
+  drupal_static_reset('user_relationships_types_load');
   menu_rebuild();
 }
 
@@ -516,7 +510,7 @@ function user_relationships_type_delete($rtid) {
     ->execute();
 
   // Clear static cache.
-  user_relationships_types_load(TRUE);
+  drupal_static_reset('user_relationships_types_load');
 
   module_invoke_all('user_relationships_type_delete', $rtype);
   if (module_exists('i18n_string')) {

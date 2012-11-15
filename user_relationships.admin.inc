@@ -415,7 +415,7 @@ function user_relationships_admin_type_delete_submit($form, &$form_state) {
   user_relationships_type_delete($form_state['values']['rtid']);
 
   // #371311 force menu rebuild
-  user_relationships_types_load(TRUE);
+  drupal_static_reset('user_relationships_types_load');
   menu_rebuild();
 
   drupal_set_message(t('Relationship @rel_name has been deleted.', user_relationships_type_translations($relationship_type)));
