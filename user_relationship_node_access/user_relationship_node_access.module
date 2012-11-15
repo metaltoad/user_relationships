@@ -306,12 +306,6 @@ function user_relationship_node_access_update_node($node) {
     return;
   }
 
-  // Clear old settings, this will actually clear even ones that user is not
-  // allowed to set.
-  db_delete('user_relationship_node_access')
-    ->condition('nid', $node->nid)
-    ->execute();
-
   $user_relationship_node_access = array();
   if (!empty($node->user_relationship_node_access) && count($node->user_relationship_node_access)) {
     // Reformat the array and optimize.
@@ -321,6 +315,12 @@ function user_relationship_node_access_update_node($node) {
       if (!is_array($permissions)) {
         continue;
       }
+
+      //if the grants actions is not set return
+      if (!isset($allowed_grants[$action])) {
+        return;
+      }
+
       foreach ($permissions as $key => $permission) {
         // Make sure user is allowed to set this permission
         if ($allowed_grants[$action] && $permission) {
@@ -328,6 +328,13 @@ function user_relationship_node_access_update_node($node) {
         }
       }
     }
+
+    // Clear old settings, this will actually clear even ones that user is not
+    // allowed to set.
+    db_delete('user_relationship_node_access')
+      ->condition('nid', $node->nid)
+      ->execute();
+
     // Save permissions if any are set.
     db_insert('user_relationship_node_access')
       ->fields(array(
