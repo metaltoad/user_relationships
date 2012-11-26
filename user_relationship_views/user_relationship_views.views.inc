@@ -305,5 +305,14 @@ function user_relationship_views_views_data() {
       ),
     ),
   );
+  $tables['users']['ur_action'] = array(
+    'real field' => 'uid',
+    'field' => array(
+      'title' => t('User relationship add / remove action'),
+      'help' => t('This will generate a link to add or remove a user relationship with a given user.'),
+      'handler' => 'views_handler_field_user_relationships_action',
+    ),
+  );
+
   return $tables;
 }
