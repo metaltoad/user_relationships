@@ -425,6 +425,19 @@ function user_relationships_type_load($param = array()) {
   }
 }
 
+/**
+ * Public API for retrieving a specific relationship by machine name.
+ *
+ * @param $machine_name
+ *    The machine name identifying the relationship.
+ * @return
+ *    object of the requested relationship type
+ *
+ */
+function user_relationships_type_machine_name_load($machine_name) {
+  return user_relationships_type_load(array('machine_name' => $machine_name));
+}
+
 
 /**
  * Load all relationship types.

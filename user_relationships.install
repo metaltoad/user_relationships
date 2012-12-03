@@ -31,6 +31,7 @@ function user_relationships_schema() {
   $schema['user_relationship_types'] = array(
     'fields' => array(
       'rtid'              => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'machine_name'      => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
       'name'              => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
       'plural_name'       => array('type' => 'varchar', 'length' => 255, 'default' => ''),
       'is_oneway'         => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0, 'size' => 'tiny'),
@@ -79,6 +80,7 @@ function user_relationships_schema() {
       ),
     ),
     'unique keys' => array(
+      'machine_name'  => array('machine_name'),
       'name'  => array('name'),
     ),
     'primary key' => array('rtid')
@@ -231,4 +233,20 @@ function user_relationships_update_7006() {
   foreach ($fields as $field => $definition) {
     db_add_field('user_relationship_types', $field, $definition);
   }
+}
+
+/**
+ * Add machine name field.
+ */
+function user_relationships_update_7103() {
+  $field = array(
+    'type' => 'varchar',
+    'length' => 255,
+    'default' => '',
+  );
+  db_add_field('user_relationship_types', 'machine_name', $field);
+
+  db_update('user_relationship_types')
+    ->expression('machine_name', 'name')
+    ->execute();
 }
