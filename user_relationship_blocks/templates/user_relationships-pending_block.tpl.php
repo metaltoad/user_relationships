@@ -17,7 +17,7 @@ if ($relationships) {
       $relation_to =& $relationship->requester;
       $controls =
         theme('user_relationships_pending_request_approve_link', array('uid' => $account->uid, 'rid' => $relationship->rid)).'|'.
-        theme('user_relationships_pending_request_disapprove_link', array('uid' => $account->uid, 'rid' => $relationship->rid));
+        theme('user_relationships_pending_request_disapprove_link', array('uid' => $account->uid, 'rid' => $relationship->rid, 'relationship' => $relationship));
       $line = t('@rel_name from !username (!controls)', array('!username' => theme('username', array('account' => $relation_to)), '!controls' => $controls) + user_relationships_type_translations($relationship));
       $key = t('Received requests');
     }

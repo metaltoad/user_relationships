@@ -51,6 +51,8 @@ function user_relationships_i18n_object_info() {
         'plural_name' => t('Plural name'),
         'name_capitalized' => t('Capitalized name'),
         'plural_name_capitalized' => t('Plural capitalized name'),
+        'create_link_text' => t('Text for Create Relationship link'),
+        'remove_link_text' => t('Text for Remove Relationship link'),
         'reverse_name' => t('Reversed name'),
         'reverse_plural_name' => t('Reversed plural name'),
         'reverse_name_capitalized' => t('Reversed capitalized name'),

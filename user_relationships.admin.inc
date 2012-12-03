@@ -247,6 +247,24 @@ function user_relationships_admin_type_edit($form, &$form_state, $relationship_t
     '#weight'         => 10,
   );
 
+  $form['branding']['create_link_text'] = array(
+    '#type'           => 'textfield',
+    '#title'          => t('Create Relationship Text'),
+    '#maxlength'      => 255,
+    '#default_value'  => isset($relationship_type) ? $relationship_type->create_link_text : NULL,
+    '#description'    => t("Link text to add the relationship. Example: Follow, add as friend, subscribe to @requestee."),
+    '#weight'         => 11,
+  );
+  
+  $form['branding']['remove_link_text'] = array(
+    '#type'           => 'textfield',
+    '#title'          => t('Remove Text'),
+    '#maxlength'      => 255,
+    '#default_value'  => isset($relationship_type) ? $relationship_type->remove_link_text : NULL,
+    '#description'    => t("Link text to remove the relationship. Example: unfriend, break up, unsibscribe, divorce."),
+    '#weight'         => 12,
+  );
+
   // #states doesn't work on a vertical tab fieldset, hide each input element
   // separately.
   $form['reverse_branding'] = array(

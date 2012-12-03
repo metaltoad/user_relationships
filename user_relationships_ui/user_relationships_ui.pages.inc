@@ -181,7 +181,7 @@ function user_relationships_ui_get_table_row($relationship, $account) {
   $links = array();
   if ($relationship->approved) {
     if (user_relationships_ui_check_access('delete', $account, $relationship)) {
-      $links[] = theme('user_relationships_remove_link', array('uid' => $account->uid, 'rid' => $relationship->rid));
+      $links[] = theme('user_relationships_remove_link', array('uid' => $account->uid, 'rid' => $relationship->rid, 'relationship' => $relationship));
     }
   }
   elseif (user_relationships_ui_check_access($permission, $account, $relationship)) {

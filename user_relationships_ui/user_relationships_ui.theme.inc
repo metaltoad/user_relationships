@@ -38,8 +38,9 @@ function theme_user_relationships_request_relationship_direct_link($variables) {
   if (!isset($relationship_type)) {
     return theme('user_relationships_request_relationship_link', array('relate_to' => $relate_to));
   }
+  $text = empty($relationship_type->create_link_text) ? "Become %name's @rel_name" : $relationship_type->create_link_text;
   return l(
-    t("Become %name's @rel_name", array('%name' => format_username($relate_to)) + user_relationships_type_translations($relationship_type)),
+    t($text, array('%name' => format_username($relate_to)) + user_relationships_type_translations($relationship_type)),
     "relationship/{$relate_to->uid}/request/{$relationship_type->rtid}",
     array(
       'query' => drupal_get_destination(),
@@ -53,10 +54,12 @@ function theme_user_relationships_request_relationship_direct_link($variables) {
  * Remove relationship link
  */
 function theme_user_relationships_remove_link($variables) {
+  $relationship = $variables['relationship'];
   $uid = $variables['uid'];
   $rid = $variables['rid'];
+  $text = empty($relationship->remove_link_text) ? 'Remove' : $relationship->remove_link_text;
   return l(
-    t('Remove'),
+    t($text),
     "user/{$uid}/relationships/{$rid}/remove",
     array(
       'title' => array('title' => t('Remove')),

@@ -308,7 +308,7 @@ function theme_user_relationship_implications_page($variables) {
       theme('username', array('account' => $this_user)),
       theme('item_list', array('items' => _user_relationship_implications_load_relationship_names($this_users_relationships, $viewed_user->uid))),
       $this_user->access > $online_interval ? t('online') : t('not online'),
-      $edit_access ? theme('user_relationships_remove_link', array('uid' => $viewed_user->uid, 'rid' => $relation->rid)) : '&nbsp;',
+      $edit_access ? theme('user_relationships_remove_link', array('uid' => $viewed_user->uid, 'rid' => $relation->rid, 'relationship'=>$relation)) : '&nbsp;',
     );
   }
 

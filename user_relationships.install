@@ -52,6 +52,16 @@ function user_relationships_schema() {
         'length' => 255,
         'default' => '',
       ),
+      'create_link_text' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => '',
+      ),
+      'remove_link_text' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => '',
+      ),
       'reverse_name_capitalized' => array(
         'type' => 'varchar',
         'length' => 255,
@@ -190,6 +200,28 @@ function user_relationships_update_7005() {
       'default' => '',
     ),
     'reverse_plural_name_capitalized' => array(
+      'type' => 'varchar',
+      'length' => 255,
+      'default' => '',
+    ),
+  );
+
+  foreach ($fields as $field => $definition) {
+    db_add_field('user_relationship_types', $field, $definition);
+  }
+}
+
+/**
+ * Add table columns for create/remove link text.
+ */
+function user_relationships_update_7006() {
+  $fields = array(
+    'create_link_text' => array(
+      'type' => 'varchar',
+      'length' => 255,
+      'default' => '',
+    ),
+    'remove_link_text' => array(
       'type' => 'varchar',
       'length' => 255,
       'default' => '',

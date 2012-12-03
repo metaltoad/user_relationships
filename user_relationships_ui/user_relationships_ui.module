@@ -108,7 +108,7 @@ function user_relationships_ui_actions_between($viewer, $viewed, $action_types =
         if (user_relationships_ui_check_access('delete', NULL, $relationship)) {
           $list[] = t('@rel_name (!remove_link)', array(
             '@rel_name'  => user_relationships_type_get_name($relationship) . ($relationship->is_oneway ? ($relationship->requester_id == $viewer->uid ? t(' (You to Them)') : t(' (Them to You)')) : NULL),
-            '!remove_link' => theme('user_relationships_remove_link', array('uid' => $viewer->uid, 'rid' => $relationship->rid)),
+            '!remove_link' => theme('user_relationships_remove_link', array('uid' => $viewer->uid, 'rid' => $relationship->rid, 'relationship'=>$relationship)),
           ));
         }
         else {
@@ -586,7 +586,7 @@ function user_relationships_ui_theme() {
     ),
 
     'user_relationships_remove_link' => array(
-      'variables' => array('uid' => NULL, 'rid' => NULL)
+      'variables' => array('uid' => NULL, 'rid' => NULL, 'relationship' => NULL)
     ),
 
     'user_relationships_pending_request_approve_link' => array(
